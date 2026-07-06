@@ -1,0 +1,34 @@
+{
+  "name": "agent-native-baseline",
+  "version": "0.1.0",
+  "description": "The agent-native project setup: an AGENTS.md contract, docs + RFCs, linters + pre-commit + security scanning, CI, and a .claude agents/commands library — the setup agent-native-setup scaffolds by default.",
+  "tags": ["general", "baseline", "multi-language"],
+  "seed": ["AGENTS.md", ".gitignore", "docs/architecture/overview.md", "docs/improvements.md", "docs/rfc/active/@DATE@-adopt-agent-native-setup.md", "README.md"],
+  "transient": [".claude/commands/onboard.md", "ONBOARDING.md"],
+  "empty_files": {
+    "docs/rfc/proposed/.gitkeep": "answers.include_docs",
+    "docs/rfc/active/.gitkeep": "answers.include_docs",
+    "docs/rfc/superseded/.gitkeep": "answers.include_docs",
+    "docs/rfc/retired/.gitkeep": "answers.include_docs"
+  },
+  "links": {
+    "CLAUDE.md": {"target": "AGENTS.md", "when": "\"claude\" in answers.tools"},
+    "GEMINI.md": {"target": "AGENTS.md", "when": "\"gemini\" in answers.tools"}
+  },
+  "prompts": [
+    {"name": "languages", "type": "checkbox", "message": "Languages (linters scaffolded only for these):", "choices": ["python", "node", "go", "rust", "html"]},
+    {"name": "tools", "type": "checkbox", "message": "AI assistants to target:", "choices": ["claude", "cursor", "copilot", "gemini"], "default": ["claude", "cursor", "copilot", "gemini"]},
+    {"name": "include_agents", "type": "confirm", "message": "Agents & commands?", "default": true},
+    {"name": "include_docs", "type": "confirm", "message": "Docs & RFCs?", "default": true},
+    {"name": "include_quality", "type": "confirm", "message": "Linters & quality?", "default": true},
+    {"name": "include_ci", "type": "confirm", "message": "CI (GitHub Actions)?", "default": true},
+    {"name": "include_security", "type": "confirm", "message": "Security scanning?", "default": true},
+    {"name": "github_actions", "type": "confirm", "message": "GitHub Actions workflows?", "default": true},
+    {"name": "hooks", "type": "confirm", "message": "Pre-commit hooks?", "default": true},
+    {"name": "runner", "type": "select", "message": "Task runner:", "choices": ["make", "task"], "default": "make"},
+    {"name": "adopt", "type": "select", "message": "Gate for an existing repo's code:", "choices": ["progressive", "full", "none"], "default": "progressive"},
+    {"name": "first_run_banner", "type": "confirm", "message": "Inject the self-removing first-run banner?", "default": true, "when": "(answers.include_quality or answers.include_ci) and answers.tools"}
+  ],
+  "onboarding": [],
+  "session_start": []
+}
