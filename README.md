@@ -73,6 +73,19 @@ These aren't just config files — they actively keep an agent (and you) on the 
   buffering), re-staging after `git add`, verifying CI after a workflow change — the
   reminders that turn a frustrating session into a smooth one.
 
+## Philosophy
+
+Three pillars, lifted from real production setups:
+
+1. **Context** — one canonical contract (`AGENTS.md` → `INSTRUCTION.md`, plus `docs/` and
+   RFCs) so intent is discoverable and never forks across tools.
+2. **Mechanical enforcement** — linters, hooks, and CI catch violations
+   automatically; error messages tell you how to fix them.
+3. **Feedback loops** — subagents, tests, and reviews compound quality.
+
+Every scaffolded project ships the **four execution principles**: think before
+coding, simplicity first, surgical changes, goal-driven execution.
+
 ## Use it
 
 ```bash
