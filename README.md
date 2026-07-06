@@ -64,3 +64,7 @@ byte equality. Don't hand-edit a built template; change it at the source and reb
 A release is: build → commit here → tag `vX.Y.Z` (matching `profile.json`) → update the
 engine's `profiles/baseline-pin.json` (tag + content hash) and its vendored copy in the
 same PR — CI verifies the pin matches this repo's tagged artifact.
+
+## License
+
+[MIT](./LICENSE) — fork it, ship it, make it yours.
