@@ -85,10 +85,10 @@ agent-native-setup my-app -o ./my-app --profile git+https://github.com/luca-mast
 Its prompts (languages, AI tools, which parts to scaffold, runner, adoption strategy, …)
 are the wizard's questions; headless runs use `-y` and `--answer name=value`.
 
-## Extend it — fork, don't overlay
+## Extend it
 
-There is deliberately no `extends` mechanism: to build "the baseline plus our house
-files", **fork this repo** and add your templates —
+To build "the baseline plus our house files", **fork this repo**, add your templates, and
+publish your fork to the community index:
 
 ```bash
 gh repo fork luca-mastrostefano/agent-native-baseline --clone my-team-profile
@@ -97,9 +97,7 @@ cd my-team-profile
 git fetch upstream && git merge upstream/main   # later: take baseline improvements
 ```
 
-Git's three-way merge handles shared-file changes an overlay never could, and you review
-upstream changes before releasing them to your own consumers (who get each release through
-the normal `agent-native-setup update` flow).
+Your consumers get each release through the normal `agent-native-setup update` flow.
 
 ## Layout
 
