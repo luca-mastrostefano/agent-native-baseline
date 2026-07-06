@@ -130,7 +130,9 @@ them from the generators' own constants, and the engine's parity gate asserts wh
 byte equality. Don't hand-edit a built template; change it at the source and rebuild.
 A release is: build → commit here → tag `vX.Y.Z` (matching `profile.json`) → update the
 engine's `profiles/baseline-pin.json` (tag + content hash) and its vendored copy in the
-same PR — CI verifies the pin matches this repo's tagged artifact.
+same PR — CI verifies the pin matches this repo's tagged artifact. Release tags are
+**immutable** (GitHub ruleset): a bad release gets a new tag and a pin bump, never a
+moved tag.
 
 ## License
 
