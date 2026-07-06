@@ -1,21 +1,77 @@
 # agent-native-baseline
 
 The flagship [agent-native-setup](https://github.com/luca-mastrostefano/agent-native-setup)
-profile: a complete, agent-native project setup —
+profile: a complete, agent-native project setup. This is what
+`agent-native-setup -o ./my-app` scaffolds by default — the engine vendors a hash-pinned
+copy of a tagged release of this repo, so scaffolding is offline and the artifact you get
+is exactly the one reviewed here.
 
-- a canonical **`AGENTS.md`** contract for coding agents and humans (with `CLAUDE.md` /
-  `GEMINI.md` links for tools that load their own file),
-- **docs + RFCs** (`docs/architecture/`, a `proposed/ → active/` RFC lifecycle, embedded
-  gate scripts),
-- **linters, pre-commit hooks, secret + dependency scanning**, per-language configs
-  (Python / Node / Go / Rust / HTML), a Make or Task command surface,
-- **CI** (GitHub Actions quality + security gates),
-- a **`.claude/`** agents & commands library and a self-deleting first-run
-  `ONBOARDING.md`.
+## What you get
 
-This is what `agent-native-setup -o ./my-app` scaffolds by default — the engine vendors a
-hash-pinned copy of a tagged release of this repo, so scaffolding is offline and the
-artifact you get is exactly the one reviewed here.
+Scaffolded into a project, this profile ships:
+
+- **The `AGENTS.md` + `INSTRUCTION.md` contract** — `INSTRUCTION.md` carries the four
+  execution principles and when-to-write-an-RFC rules (managed, so an `update` keeps it
+  fresh); `AGENTS.md` is the thin project map (navigation + live command surface) that
+  points at it. `CLAUDE.md` and `GEMINI.md` (symlinks), `.cursor/rules/`, and
+  `.github/copilot-instructions.md` all point back to `AGENTS.md`, so the rules never fork
+  across tools.
+- **A `.claude/` agent library** — focused subagents (`code-reviewer`, `rfc-reviewer`,
+  `planner`), slash commands (`/review`, `/rfc`, `/update-agent-scaffolding`, `/onboard`),
+  a permission allowlist for the contract's own commands, and hooks that inject the live
+  command surface at session start and auto-format files as they're edited.
+- **`docs/` + an RFC lifecycle** — a pre-seeded architecture map (reflecting the active
+  RFCs), the `proposed → active → (superseded | retired)` RFC flow (with a template), a root
+  `CONTRIBUTING.md` dev-loop guide, and an improvements backlog — kept in folder-sync and
+  freshness by hooks.
+- **`tools/checks/`** — small enforcement scripts (RFC ↔ folder sync, "new component
+  needs a doc," "structural change needs an RFC") that ship with their own tests.
+- **Per-language lint, format & types** — ruff (Python), ESLint + Prettier + tsc (JS/TS),
+  golangci-lint + gofmt (Go), clippy + rustfmt (Rust), htmlhint + lychee (HTML), with
+  their config files.
+- **A three-layer quality gate** — the same checks wired at **pre-commit**, a
+  self-documenting **`make`/`task`** command surface, and **CI**, so local-green means
+  CI-green.
+- **A security baseline** — committed-secret scanning (gitleaks) and dependency/vuln
+  audits, in both pre-commit and a dedicated CI job, plus `SECURITY.md` and Dependabot.
+- **Engineering baseline files** — `.editorconfig`, `.gitattributes`, per-language
+  `.gitignore`, a PR template, a provenance manifest (`.agent-native-setup.json`, recording
+  what generated the project for a future `update`), and (on existing repos) a
+  `.git-blame-ignore-revs`.
+- **A self-deleting `ONBOARDING.md`** — a one-time runbook that walks an agent through
+  activating the setup on first run, then removes itself.
+
+It's **non-destructive**: existing files are never overwritten, and on a repo that
+already has code it **grandfathers the legacy code** — the gate checks only what a
+pull request changes, so day one isn't a wall of red.
+
+## Guardrails for your agent
+
+These aren't just config files — they actively keep an agent (and you) on the rails:
+
+- **A real testing bar.** Every change ships the test that *proves* it, at the right
+  level — **unit** (logic + edge cases), **integration** (module / public-contract /
+  boundary crossings), and **regression** (a failing test written *first* for every bug).
+  Tests must prove behavior, not restate the code: cover the boundaries (empty/zero/one/max),
+  bad input, and error paths — not just the happy path.
+- **A self-review pass before "done".** A `code-reviewer` subagent (`/review`) reads the
+  diff and flags real bugs, over-engineering, drive-by changes, stale docs, weak or
+  happy-path-only tests, and changes that hurt cohesion or sneak in coupling (scoped to the
+  change — it never nags about legacy file size) — caught before they land, not after.
+- **Security in two layers.** `gitleaks` (committed secrets) and dependency/vulnerability
+  audits run mechanically in pre-commit and CI; for changes touching auth, untrusted input,
+  secrets, or network I/O, the contract routes the agent to a `/security-review` for the
+  logic-level flaws scanners can't see.
+- **Docs, tests, and decisions can't silently drift.** `commit-msg` hooks require an RFC
+  for a structural change, an architecture-doc update for a new component, and a test
+  alongside a source change — each waivable with a logged trailer; RFCs auto-file into
+  their lifecycle folder.
+- **Every rule, enforced three ways.** The same checks run at **pre-commit**, on the
+  **command surface**, and in **CI** — so a violation can't slip past whichever layer the
+  agent skips.
+- **…and the small operational foot-guns.** Followable background processes (no silent
+  buffering), re-staging after `git add`, verifying CI after a workflow change — the
+  reminders that turn a frustrating session into a smooth one.
 
 ## Use it
 
