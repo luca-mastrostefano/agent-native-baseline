@@ -2,7 +2,7 @@
 
 🌐 Part of the [agent-native-setup registry](https://lucamastrostefano.com/agent-native-setup/) — browse all community profiles.
 
-The flagship [agent-native-setup](https://github.com/luca-mastrostefano/agent-native-setup)
+The default [agent-native-setup](https://github.com/luca-mastrostefano/agent-native-setup)
 profile: a complete, agent-native project setup. This is what
 `agent-native-setup -o ./my-app` scaffolds by default — the engine vendors a hash-pinned
 copy of a tagged release of this repo, so scaffolding is offline and the artifact you get
