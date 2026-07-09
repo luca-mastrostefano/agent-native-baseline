@@ -90,12 +90,26 @@ coding, simplicity first, surgical changes, goal-driven execution.
 
 ## Use it
 
+**One command, no install.** This profile is the default, so you don't even name it:
+
 ```bash
-pip install agent-native-setup
-agent-native-setup my-app -o ./my-app          # this profile is the default
-# or explicitly / pinned:
-agent-native-setup my-app -o ./my-app --profile git+https://github.com/luca-mastrostefano/agent-native-baseline.git@v0.1.0
+brew install uv   # if you don't have uv yet — docs.astral.sh/uv
+uvx --from git+https://github.com/luca-mastrostefano/agent-native-setup agent-native-setup -o ./my-app
 ```
+
+To pick it explicitly, or to pin a release:
+
+```bash
+uvx --from git+https://github.com/luca-mastrostefano/agent-native-setup agent-native-setup \
+  -o ./my-app --profile git+https://github.com/luca-mastrostefano/agent-native-baseline.git@v0.2.1
+```
+
+`profile validate` classifies this profile as **unsafe** — it ships pre-commit hooks and
+onboarding steps that run on your machine — so the wizard shows what it will do and asks
+you to approve before writing anything (a headless `-y` run needs `--allow-code`).
+
+Prefer a persistent command? `uv tool install git+https://github.com/luca-mastrostefano/agent-native-setup`
+(or `pipx install …`). The engine is not on PyPI, so `pip install agent-native-setup` will not work.
 
 Its prompts (languages, AI tools, which parts to scaffold, runner, adoption strategy, …)
 are the wizard's questions; headless runs use `-y` and `--answer name=value`.
